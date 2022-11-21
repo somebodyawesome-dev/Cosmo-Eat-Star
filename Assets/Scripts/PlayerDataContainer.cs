@@ -22,7 +22,5 @@ public class PlayerDataContainer : MonoBehaviour
     private void Start()
     {
         currScore = 0;
-       
-
     }
 }

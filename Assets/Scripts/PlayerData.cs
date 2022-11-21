@@ -48,4 +48,20 @@ public class PlayerData : SingletonScriptableObject<PlayerData>
             FindObjectOfType<AudioManager>().setMusic(value);
         }
     }
+
+    [SerializeField] private string _token = string.Empty;
+
+    public static string token
+    {
+        get
+        {
+            return Instance._token;
+        }
+        set
+        {
+            Instance._token = value;
+            SaveSystem.savePlayerData();
+        }
+    }
+
 }

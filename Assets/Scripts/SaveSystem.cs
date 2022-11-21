@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -28,16 +29,22 @@ public static class SaveSystem
             SavedPlayerData savedPlayerData = formatter.Deserialize(stream) as SavedPlayerData;
             stream.Close();
             //load data into scriptableObjcet
-            PlayerData.highScore = savedPlayerData.highScore;
-            PlayerData.isMusicOff = savedPlayerData.isMusicOff;
-            PlayerData.isSoundOff = savedPlayerData.isSoundOff;
-
-
-
+            if (savedPlayerData != null)
+            {
+                PlayerData.highScore = savedPlayerData.highScore;
+                PlayerData.isMusicOff = savedPlayerData.isMusicOff ;
+                PlayerData.isSoundOff = savedPlayerData.isSoundOff ;
+                PlayerData.token = savedPlayerData.token ?? string.Empty;
+            }
         }
         else
         {
             Debug.LogError("PlayerData File not found in :" + playerDataPath);
+            PlayerData.highScore = 0;
+            PlayerData.isMusicOff = false ;
+            PlayerData.isSoundOff = false ;
+            PlayerData.token = string.Empty;
+            
         }
     }
 }
