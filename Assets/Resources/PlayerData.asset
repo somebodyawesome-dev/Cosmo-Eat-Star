@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daabe105725a5e04f8cc3f4c943bfba3, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  _highScore: 0
-  _isSoundOff: 0
-  _isMusicOff: 0
+  _highScore: 61
+  _isSoundOff: 1
+  _isMusicOff: 1
+  _token: eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoic3RyaW5nIiwiZXhwIjoxNzAwNjAwMDA4fQ.h-ui2iPONdc4LteyUjKNEgTYd9YmsKjdOVWw7AtXjkdukPaQCnc5UKy-EnluqfkxX0NTx570Gtk7MCSGVS7Agg

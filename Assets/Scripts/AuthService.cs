@@ -1,12 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
+using System;
+using System.Collections;
+
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-
+[System.Serializable]
 public class AuthService : MonoBehaviour
 {
-    public class BypassCertificate : CertificateHandler
+    [SerializeField] private string m_Username = string.Empty;
+    [SerializeField] private string m_Password = string.Empty;
+
+    [SerializeField]
+    public string username
+    {
+        get => m_Username;
+        set => m_Username = value;
+
+    }
+
+    [SerializeField]
+    public string password
+    {
+        get => m_Password;
+        set => m_Password = value;
+    }
+
+    private class BypassCertificate : CertificateHandler
     {
         protected override bool ValidateCertificate(byte[] certificateData)
         {
