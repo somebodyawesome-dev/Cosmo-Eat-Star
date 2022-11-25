@@ -64,4 +64,5 @@ public class PlayerData : SingletonScriptableObject<PlayerData>
         }
     }
 
+   
 }

@@ -5,13 +5,18 @@ using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+
 [System.Serializable]
 public class AuthService : MonoBehaviour
 {
     [SerializeField] private string m_Username = string.Empty;
     [SerializeField] private string m_Password = string.Empty;
+    [SerializeField] private string m_PasswordConfirmation = string.Empty;
+    [SerializeField] private GameObject signInMenu;
+    [SerializeField] private GameObject signUpMenu;
+    [SerializeField] private GameObject playMenu;
+    [SerializeField] private GameObject authButtonsHolder;
 
-    [SerializeField]
     public string username
     {
         get => m_Username;
@@ -19,11 +24,17 @@ public class AuthService : MonoBehaviour
 
     }
 
-    [SerializeField]
+
     public string password
     {
         get => m_Password;
         set => m_Password = value;
+    }
+
+    public string passwordConfirmation
+    {
+        get => m_PasswordConfirmation;
+        set => m_PasswordConfirmation = value;
     }
 
     private class BypassCertificate : CertificateHandler
@@ -33,16 +44,58 @@ public class AuthService : MonoBehaviour
             //Simply return true no matter what
             return true;
         }
-    } 
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SignIn());
+        playMenu.SetActive(true);
+        signInMenu.SetActive(false);
+        signUpMenu.SetActive(false);
     }
 
+    void updateUI()
+    {
+        var isLoggedIn = loggedIn();
+        playMenu.SetActive(isLoggedIn);
+        signInMenu.SetActive(!isLoggedIn);
+        signUpMenu.SetActive(false);
+        authButtonsHolder.SetActive(false);
+        authButtonsHolder.SetActive(true);
+    }
+
+    void openSignUpMenu()
+    {
+        playMenu.SetActive(false);
+        signInMenu.SetActive(false);
+        signUpMenu.SetActive(true);
+    }
+
+public bool loggedIn()
+    {
+        return PlayerData.token != null && 
+               !PlayerData.token.Equals(string.Empty);
+    }
+    public void SignInSync()
+    {
+        
+        StartCoroutine(SignIn());
+        signInMenu.SetActive(false);
+        playMenu.SetActive(true);
+    }
+
+    public void SignUpSync()
+    {
+        StartCoroutine(SignUp());
+    }
+    
+    public void SignOut()
+    {
+        PlayerData.token = string.Empty;
+    }
     IEnumerator SignIn()
     {
-       var body = "{\"username\": \"string\",\"password\": \"string\"}";
+       var body = "{\"username\": \""+username+"\",\"password\": \""+password+"\"}";
         using ( UnityWebRequest www = UnityWebRequest.Post("https://localhost:7292/api/Auth/login",body))
         {
             www.uploadHandler= new UploadHandlerRaw(string.IsNullOrEmpty(body) ? null : Encoding.UTF8.GetBytes(body));
@@ -62,10 +115,44 @@ public class AuthService : MonoBehaviour
                 Debug.Log("Received : "+token);
                 PlayerData.token = token;
             }
+            updateUI();
 
         }
 
     }
+
+    IEnumerator SignUp()
+    {
+        if (m_Password.Equals(m_PasswordConfirmation))
+        {
+            Debug.Log("password and confirm password doesnt match");
+            yield return null;
+        }
+        var body = "{\"username\": \"string\",\"password\": \"string\"}";
+        using ( UnityWebRequest www = UnityWebRequest.Post("https://localhost:7292/api/Auth/signup",body))
+        {
+            www.uploadHandler= new UploadHandlerRaw(string.IsNullOrEmpty(body) ? null : Encoding.UTF8.GetBytes(body));
+            www.certificateHandler = new BypassCertificate() ;
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("accept","text/plain" ); 
+           
+
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.Log(www.downloadHandler.text);
+            }
+            else
+            {
+                var token = www.downloadHandler.text;
+                Debug.Log("Received : "+token);
+            }
+            updateUI();
+
+
+        }
+    }
+
     
     UnityWebRequest CreateApiRequest(string url, string method, object body)
     {
