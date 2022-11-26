@@ -37,7 +37,7 @@ public class AuthService : MonoBehaviour
         set => m_PasswordConfirmation = value;
     }
 
-    private class BypassCertificate : CertificateHandler
+    public class BypassCertificate : CertificateHandler
     {
         protected override bool ValidateCertificate(byte[] certificateData)
         {
