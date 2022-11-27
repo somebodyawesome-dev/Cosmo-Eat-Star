@@ -112,7 +112,7 @@ public bool loggedIn()
             else
             {
                 var token = www.downloadHandler.text;
-                Debug.Log("Received : "+token);
+                Debug.Log("Received: "+token);
                 PlayerData.token = token;
             }
             updateUI();
