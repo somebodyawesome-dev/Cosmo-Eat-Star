@@ -123,12 +123,13 @@ public bool loggedIn()
 
     IEnumerator SignUp()
     {
-        if (m_Password.Equals(m_PasswordConfirmation))
+        if (!m_Password.Equals(m_PasswordConfirmation))
         {
             Debug.Log("password and confirm password doesnt match");
-            yield return null;
+            yield break;
+            
         }
-        var body = "{\"username\": \"string\",\"password\": \"string\"}";
+        var body = "{\"username\": \""+username+"\",\"password\": \""+password+"\"}";
         using ( UnityWebRequest www = UnityWebRequest.Post("https://localhost:7292/api/Auth/signup",body))
         {
             www.uploadHandler= new UploadHandlerRaw(string.IsNullOrEmpty(body) ? null : Encoding.UTF8.GetBytes(body));

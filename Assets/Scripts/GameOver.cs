@@ -37,6 +37,7 @@ public class GameOver : MonoBehaviour
         {
             if (score > PlayerData.highScore)
             {
+                PlayerData.highScore = score;
                 //if user logged in update score in db
                 StartCoroutine(updateScore(score));
             }
